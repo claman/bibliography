@@ -28,9 +28,6 @@ for line in file:
     else:
         form = '@book'
 
-    # containingVolume = containingVolumeSearch.search(line)
-    # containingVolume = containingVolume.group()
-
     print form + '{'
     print ' author: "' + author + '",'
     print ' year: "' + pubDate + '",'
