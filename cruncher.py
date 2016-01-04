@@ -15,6 +15,9 @@ journalPagesSearch = re.compile('(?::\s*)(\d*-\d*)')
 containingVolumeInfoSearch = re.compile('(?<=( In ))(.*\d*\.)')
 containingVolumeSearch = re.compile('(.*)(?=, \d*-\d*\.)')
 
+publishingInfoSearch = re.compile('(?<=\d{4}\. )(.*)')
+publishingInfoExtract = re.compile('(?<=\. )(.*)(?=\.)')
+
 def getAuthor(search):
     author = authorSearch.match(search)
     author = author.group().rstrip()
@@ -49,7 +52,13 @@ for line in file:
     elif title[0] != '"':
         format = '@book'
 
-    if format == 'excerpt':
+    if format == '@book':
+        publishingInfo = publishingInfoSearch.search(line).group()
+        publishingExtracted = publishingInfoExtract.search(publishingInfo).group()
+        publishingExtracted = publishingExtracted.split(': ')
+        publisher = publishingExtracted[1]
+        publishedCity = publishingExtracted[0]
+    elif format == 'excerpt':
         journalPages = journalPagesSearch.search(line)
         containingVolumeInfo = containingVolumeInfoSearch.search(line)
         if journalPages:
@@ -67,6 +76,11 @@ for line in file:
             bookInfo = re.search('(.*\d\.)', containingVolumeInfo.group()).group()
             pages = re.search('(\d*-\d*)(?=\.)', bookInfo).group()
             bookTitle = containingVolumeSearch.search(bookInfo).group()
+            publishingInfo = publishingInfoSearch.search(line).group()
+            publishingExtracted = publishingInfoExtract.search(publishingInfo).group()
+            publishingExtracted = publishingExtracted.split(': ')
+            publisher = publishingExtracted[1]
+            publishedCity = publishingExtracted[0]
 
     authorLast = author.split(',')[0].lower()
     titleFirst = title.split(' ')[0].lower()
@@ -79,27 +93,31 @@ for line in file:
         print 'author: ' + author
         print 'year: ' + pubDate
         print 'title: ' + title
+        print 'publisher: ' + publisher
+        print 'city: ' + publishedCity
         print
     elif format == '@article':
         print format + '{'
-        print ' author: "' + author + '",'
-        print ' year: "' + pubDate + '",'
-        print ' title: "' + title + '",'
-        print ' journal: "' + journal + '",'
+        print 'author: "' + author + '",'
+        print 'year: "' + pubDate + '",'
+        print 'title: "' + title + '",'
+        print 'journal: "' + journal + '",'
         if volumeNum:
-            print ' volume: "' + volume + '",'
+            print 'volume: "' + volume + '",'
         if issueNum:
-            print ' issue: "' + issue + '",'
-        print ' pages: "' + pages + '"'
+            print 'issue: "' + issue + '",'
+        print 'pages: "' + pages + '"'
         print '}'
         print
     elif format == '@section':
         print format + '{'
-        print ' author: "' + author + '",'
-        print ' year: "' + pubDate + '",'
-        print ' title: "' + title + '",'
-        print ' book: "' + bookTitle + '",'
-        print ' pages: "' + pages + '"'
+        print 'author: "' + author + '",'
+        print 'year: "' + pubDate + '",'
+        print 'title: "' + title + '",'
+        print 'book: "' + bookTitle + '",'
+        print 'pages: "' + pages + '"'
+        print 'publisher: ' + publisher
+        print 'city: ' + publishedCity
         print '}'
         print
 
@@ -169,3 +187,4 @@ for line in file:
         #     output.write('\n')
 
 file.close()
+output.close()
