@@ -65,7 +65,7 @@ for line in file:
         print ' title: "' + title + '",'
         print ' journal: "' + journal + '",'
         print ' volume: '
-        print  'issue: '
+        print  ' issue: '
         print ' pages: "' + pages + '"'
         print '}'
         print
