@@ -54,27 +54,27 @@ for line in file:
             pages = re.search('(\d*-\d*)(?=\.)', bookInfo).group()
             bookTitle = containingVolumeSearch.search(bookInfo).group()
 
-    # if format == '@book':
-    #     print format + '{'
-    #     print ' author: "' + author + '",'
-    #     print ' year: "' + pubDate + '",'
-    #     print ' title: "' + title + '",'
-    #     print '}'
-    #     print
-    # if format == '@article':
-    #     print format + '{'
-    #     print ' author: "' + author + '",'
-    #     print ' year: "' + pubDate + '",'
-    #     print ' title: "' + title + '",'
-    #     print ' journal: "' + journal + '",'
-    #     if volumeNum:
-    #         print ' volume: "' + volume + '",'
-    #     if issueNum:
-    #         print ' issue: "' + issue + '",'
-    #     print ' pages: "' + pages + '"'
-    #     print '}'
-    #     print
-    if format == '@section':
+    if format == '@book':
+        print format + '{'
+        print ' author: "' + author + '",'
+        print ' year: "' + pubDate + '",'
+        print ' title: "' + title + '",'
+        print '}'
+        print
+    elif format == '@article':
+        print format + '{'
+        print ' author: "' + author + '",'
+        print ' year: "' + pubDate + '",'
+        print ' title: "' + title + '",'
+        print ' journal: "' + journal + '",'
+        if volumeNum:
+            print ' volume: "' + volume + '",'
+        if issueNum:
+            print ' issue: "' + issue + '",'
+        print ' pages: "' + pages + '"'
+        print '}'
+        print
+    elif format == '@section':
         print format + '{'
         print ' author: "' + author + '",'
         print ' year: "' + pubDate + '",'
