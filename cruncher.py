@@ -67,35 +67,36 @@ for line in file:
             pages = re.search('(\d*-\d*)(?=\.)', bookInfo).group()
             bookTitle = containingVolumeSearch.search(bookInfo).group()
 
-    if format == '@book':
-        output.write(format + '{\n')
-        output.write(' author: "' + author + '",\n')
-        output.write(' year: "' + pubDate + '",\n')
-        output.write(' title: "' + title + '",\n')
-        output.write('}\n')
-        output.write('\n')
-    elif format == '@article':
-        output.write(format + '{\n')
-        output.write(' author: "' + author + '",\n')
-        output.write(' year: "' + pubDate + '",\n')
-        output.write(' title: "' + title + '",\n')
-        output.write(' journal: "' + journal + '",\n')
-        if volumeNum:
-            output.write(' volume: "' + volume + '",\n')
-        if issueNum:
-            output.write(' issue: "' + issue + '",\n')
-        output.write(' pages: "' + pages + '"\n')
-        output.write('}\n')
-        output.write('\n')
-    elif format == '@section':
-        output.write(format + '{\n')
-        output.write(' author: "' + author + '",\n')
-        output.write(' year: "' + pubDate + '",\n')
-        output.write(' title: "' + title + '",\n')
-        output.write(' book: "' + bookTitle + '",\n')
-        output.write(' pages: "' + pages + '"\n')
-        output.write('}\n')
-        output.write('\n')
+    prompt = str(raw_input("Add entry to bibliography? (y/n): "))
+    if prompt[0] == 'y':
+        if format == '@book':
+            output.write(format + '{\n')
+            output.write(' author: "' + author + '",\n')
+            output.write(' year: "' + pubDate + '",\n')
+            output.write(' title: "' + title + '",\n')
+            output.write('}\n')
+            output.write('\n')
+        elif format == '@article':
+            output.write(format + '{\n')
+            output.write(' author: "' + author + '",\n')
+            output.write(' year: "' + pubDate + '",\n')
+            output.write(' title: "' + title + '",\n')
+            output.write(' journal: "' + journal + '",\n')
+            if volumeNum:
+                output.write(' volume: "' + volume + '",\n')
+            if issueNum:
+                output.write(' issue: "' + issue + '",\n')
+            output.write(' pages: "' + pages + '"\n')
+            output.write('}\n')
+            output.write('\n')
+        elif format == '@section':
+            output.write(format + '{\n')
+            output.write(' author: "' + author + '",\n')
+            output.write(' year: "' + pubDate + '",\n')
+            output.write(' title: "' + title + '",\n')
+            output.write(' book: "' + bookTitle + '",\n')
+            output.write(' pages: "' + pages + '"\n')
+            output.write('}\n')
+            output.write('\n')
 
-print 'Bibliography created'
 file.close()
