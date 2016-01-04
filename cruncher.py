@@ -5,9 +5,13 @@ file = open('biblio.txt', 'r')
 authorSearch = re.compile('^[\D]*\D')
 pubDateSearch = re.compile('\d{4}\.')
 titleSearch = re.compile('(?<=\d{4}\. )(.*(\."|\. ))')
-journalTitleSearch = re.compile('(?<="\s)(.*)(?=:)')
-journalPagesSearch = re.compile('(?:\:\s*)(\d*-\d*)')
-containingVolumeSearch = re.compile('(?<=( In )).*(?=\d)')
+
+journalSearch = re.compile('(?<="\s)(.*)(?=:)')
+volumeSearch = re.compile('(?<=\D)(\d*)(?=\()')
+issueSearch = re.compile('(?<=\()(\d*)(?=\))')
+journalPagesSearch = re.compile('(?::\s*)(\d*-\d*)')
+
+# containingVolumeSearch = re.compile('(?<=( In )).*(?=\d)')
     # for this pull out the pages at the end \d*-\d*\.
 
 for line in file:
@@ -26,44 +30,46 @@ for line in file:
     title = split[0]
     if title[0] == '"':
         title = title[1:]
-        form = '@article'
+        format = 'excerpt'
     elif title[0] != '"':
         format = '@book'
-    # if title[0] != '"':
-    #     format = '@book'
-    # else:
-    #     title = title[1:]
-    #     switcher = 'true'
 
-    # if switcher == 'true':
-    #     journalPages = journalPagesSearch.search(line)
-    #     containingVolume = containingVolumeSearch.search(line)
-    #     if journalPages:
-    #         journal = journalTitleSearch.search(line)
-    #         journal = journal.group()
-    #         pages = journalPages
-    #         format = '@article'
-    #     elif containingVolume:
-    #         containingVolume = containingVolume.group()
-    #         format = '@excerpt'
+    if format == 'excerpt':
+        journalPages = journalPagesSearch.search(line)
+        # containingVolume = containingVolumeSearch.search(line)
+        if journalPages:
+            format = '@article'
+            journal = journalSearch.search(line).group()
+            # volume = volumeSearch.search(journal)
+            # issue = issueSearch.search(journal)
+            # if volume:
+            #     volume = volume.group()
+            # if issue:
+            #     issue = issue.group()
+            pages = re.search('(\d*-\d*)', journalPages.group()).group()
+        # elif containingVolume:
+        #     containingVolume = containingVolume.group()
+        #     format = '@section'
 
-    if format == '@book':
-        print format + '{'
-        print ' author: "' + author + '",'
-        print ' year: "' + pubDate + '",'
-        print ' title: "' + title + '",'
-        print '}'
-        print
+    # if format == '@book':
+    #     print format + '{'
+    #     print ' author: "' + author + '",'
+    #     print ' year: "' + pubDate + '",'
+    #     print ' title: "' + title + '",'
+    #     print '}'
+    #     print
     if format == '@article':
         print format + '{'
         print ' author: "' + author + '",'
         print ' year: "' + pubDate + '",'
         print ' title: "' + title + '",'
         print ' journal: "' + journal + '",'
+        print ' volume: '
+        print  'issue: '
         print ' pages: "' + pages + '"'
         print '}'
         print
-    # elif format == '@excerpt':
+    # elif format == '@section':
     #     print format + '{'
     #     print ' author: "' + author + '",'
     #     print ' year: "' + pubDate + '",'
