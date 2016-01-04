@@ -84,4 +84,5 @@ for line in file:
         output.write('}\n')
         output.write('\n')
 
+print 'Bibliography created'
 file.close()
