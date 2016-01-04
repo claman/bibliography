@@ -55,33 +55,33 @@ for line in file:
             bookTitle = containingVolumeSearch.search(bookInfo).group()
 
     if format == '@book':
-        print format + '{'
-        print ' author: "' + author + '",'
-        print ' year: "' + pubDate + '",'
-        print ' title: "' + title + '",'
-        print '}'
-        print
+        output.write(format + '{\n')
+        output.write(' author: "' + author + '",\n')
+        output.write(' year: "' + pubDate + '",\n')
+        output.write(' title: "' + title + '",\n')
+        output.write('}\n')
+        output.write('\n')
     elif format == '@article':
-        print format + '{'
-        print ' author: "' + author + '",'
-        print ' year: "' + pubDate + '",'
-        print ' title: "' + title + '",'
-        print ' journal: "' + journal + '",'
+        output.write(format + '{\n')
+        output.write(' author: "' + author + '",\n')
+        output.write(' year: "' + pubDate + '",\n')
+        output.write(' title: "' + title + '",\n')
+        output.write(' journal: "' + journal + '",\n')
         if volumeNum:
-            print ' volume: "' + volume + '",'
+            output.write(' volume: "' + volume + '",\n')
         if issueNum:
-            print ' issue: "' + issue + '",'
-        print ' pages: "' + pages + '"'
-        print '}'
-        print
+            output.write(' issue: "' + issue + '",\n')
+        output.write(' pages: "' + pages + '"\n')
+        output.write('}\n')
+        output.write('\n')
     elif format == '@section':
-        print format + '{'
-        print ' author: "' + author + '",'
-        print ' year: "' + pubDate + '",'
-        print ' title: "' + title + '",'
-        print ' book: "' + bookTitle + '",'
-        print ' pages: "' + pages + '"'
-        print '}'
-        print
+        output.write(format + '{\n')
+        output.write(' author: "' + author + '",\n')
+        output.write(' year: "' + pubDate + '",\n')
+        output.write(' title: "' + title + '",\n')
+        output.write(' book: "' + bookTitle + '",\n')
+        output.write(' pages: "' + pages + '"\n')
+        output.write('}\n')
+        output.write('\n')
 
 file.close()
