@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import re
 file = open('biblio.txt', 'r')
+output = open('output.bib', 'w')
 
 authorSearch = re.compile('^[\D]*\D')
 pubDateSearch = re.compile('\d{4}\.')
@@ -11,8 +12,7 @@ volumeSearch = re.compile('(?<=\D)(\d*)(?=\()')
 issueSearch = re.compile('(?<=\()(\d*)(?=\))')
 journalPagesSearch = re.compile('(?::\s*)(\d*-\d*)')
 
-containingVolumeSearch = re.compile('(?<=( In )).*(?=\d)')
-    # for this pull out the pages at the end \d*-\d*\.
+containingVolumeSearch = re.compile('(?<=( In ))(.*\d*\.)')
 
 for line in file:
     author = authorSearch.match(line)
@@ -48,34 +48,38 @@ for line in file:
                 issue = issueNum.group()
             pages = re.search('(\d*-\d*)', journalPages.group()).group()
         elif containingVolume:
-            containingVolume = containingVolume.group()
             format = '@section'
+            bookTitle = re.search('(.*\d)', containingVolume.group()).group()
+            # pages = re.search('(\d*-\d*)(?=\.)', bookTitle).group()
 
-    if format == '@book':
-        print format + '{'
-        print ' author: "' + author + '",'
-        print ' year: "' + pubDate + '",'
-        print ' title: "' + title + '",'
-        print '}'
-        print
-    if format == '@article':
-        print format + '{'
-        print ' author: "' + author + '",'
-        print ' year: "' + pubDate + '",'
-        print ' title: "' + title + '",'
-        print ' journal: "' + journal + '",'
-        if volumeNum:
-            print ' volume: "' + volume + '",'
-        if issueNum:
-            print ' issue: "' + issue + '",'
-        print ' pages: "' + pages + '"'
-        print '}'
-        print
-    # elif format == '@section':
+    # if format == '@book':
     #     print format + '{'
     #     print ' author: "' + author + '",'
     #     print ' year: "' + pubDate + '",'
     #     print ' title: "' + title + '",'
     #     print '}'
     #     print
-    #     print containingVolume
+    # if format == '@article':
+    #     print format + '{'
+    #     print ' author: "' + author + '",'
+    #     print ' year: "' + pubDate + '",'
+    #     print ' title: "' + title + '",'
+    #     print ' journal: "' + journal + '",'
+    #     if volumeNum:
+    #         print ' volume: "' + volume + '",'
+    #     if issueNum:
+    #         print ' issue: "' + issue + '",'
+    #     print ' pages: "' + pages + '"'
+    #     print '}'
+    #     print
+    if format == '@section':
+        print format + '{'
+        print ' author: "' + author + '",'
+        print ' year: "' + pubDate + '",'
+        print ' title: "' + title + '",'
+        print ' book: "' + bookTitle + '",'
+        # print ' pages: "' + pages + '"'
+        print '}'
+        print
+
+file.close()
