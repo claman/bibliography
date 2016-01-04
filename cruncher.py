@@ -137,6 +137,35 @@ for line in file:
     elif prompt[0] == 's':
         print 'Skipping\n'
     elif prompt[0] == 'e':
-        print 'Edits should be supported soon'
+        format = str(raw_input('Enter citation format (book, article, or citation): '))
+        if format == 'book':
+            output.write(format + '{' + edit('citekey') + ',\n')
+            output.write(' author = "' + edit('author') + '",\n')
+            output.write(' year = "' + edit('pubDate') + '",\n')
+            output.write(' title = "' + edit('title') + '",\n')
+            output.write('}\n')
+            output.write('\n')
+        # elif format == 'article':
+        #     output.write(format + '{' + citekey + ',\n')
+        #     output.write(' author = "' + author + '",\n')
+        #     output.write(' year = "' + pubDate + '",\n')
+        #     output.write(' title = "' + title + '",\n')
+        #     output.write(' journal = "' + journal + '",\n')
+        #     if volumeNum:
+        #         output.write(' volume = "' + volume + '",\n')
+        #     if issueNum:
+        #         output.write(' issue = "' + issue + '",\n')
+        #     output.write(' pages = "' + pages + '"\n')
+        #     output.write('}\n')
+        #     output.write('\n')
+        # elif format == 'section':
+        #     output.write(format + '{' + citekey + ',\n')
+        #     output.write(' author = "' + author + '",\n')
+        #     output.write(' year = "' + pubDate + '",\n')
+        #     output.write(' title = "' + title + '",\n')
+        #     output.write(' book = "' + bookTitle + '",\n')
+        #     output.write(' pages = "' + pages + '"\n')
+        #     output.write('}\n')
+        #     output.write('\n')
 
 file.close()
