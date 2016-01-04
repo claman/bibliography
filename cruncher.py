@@ -40,32 +40,34 @@ for line in file:
         if journalPages:
             format = '@article'
             journal = journalSearch.search(line).group()
-            # volume = volumeSearch.search(journal)
-            # issue = issueSearch.search(journal)
-            # if volume:
-            #     volume = volume.group()
-            # if issue:
-            #     issue = issue.group()
+            volumeNum = volumeSearch.search(journal)
+            issueNum = issueSearch.search(journal)
+            if volumeNum:
+                volume = volumeNum.group()
+            if issueNum:
+                issue = issueNum.group()
             pages = re.search('(\d*-\d*)', journalPages.group()).group()
         # elif containingVolume:
         #     containingVolume = containingVolume.group()
         #     format = '@section'
 
-    # if format == '@book':
-    #     print format + '{'
-    #     print ' author: "' + author + '",'
-    #     print ' year: "' + pubDate + '",'
-    #     print ' title: "' + title + '",'
-    #     print '}'
-    #     print
+    if format == '@book':
+        print format + '{'
+        print ' author: "' + author + '",'
+        print ' year: "' + pubDate + '",'
+        print ' title: "' + title + '",'
+        print '}'
+        print
     if format == '@article':
         print format + '{'
         print ' author: "' + author + '",'
         print ' year: "' + pubDate + '",'
         print ' title: "' + title + '",'
         print ' journal: "' + journal + '",'
-        print ' volume: '
-        print  ' issue: '
+        if volumeNum:
+            print ' volume: "' + volume + '",'
+        if issueNum:
+            print ' issue: "' + issue + '",'
         print ' pages: "' + pages + '"'
         print '}'
         print
