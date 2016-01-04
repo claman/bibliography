@@ -11,7 +11,7 @@ volumeSearch = re.compile('(?<=\D)(\d*)(?=\()')
 issueSearch = re.compile('(?<=\()(\d*)(?=\))')
 journalPagesSearch = re.compile('(?::\s*)(\d*-\d*)')
 
-# containingVolumeSearch = re.compile('(?<=( In )).*(?=\d)')
+containingVolumeSearch = re.compile('(?<=( In )).*(?=\d)')
     # for this pull out the pages at the end \d*-\d*\.
 
 for line in file:
@@ -36,7 +36,7 @@ for line in file:
 
     if format == 'excerpt':
         journalPages = journalPagesSearch.search(line)
-        # containingVolume = containingVolumeSearch.search(line)
+        containingVolume = containingVolumeSearch.search(line)
         if journalPages:
             format = '@article'
             journal = journalSearch.search(line).group()
@@ -47,9 +47,9 @@ for line in file:
             if issueNum:
                 issue = issueNum.group()
             pages = re.search('(\d*-\d*)', journalPages.group()).group()
-        # elif containingVolume:
-        #     containingVolume = containingVolume.group()
-        #     format = '@section'
+        elif containingVolume:
+            containingVolume = containingVolume.group()
+            format = '@section'
 
     if format == '@book':
         print format + '{'
