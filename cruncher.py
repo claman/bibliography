@@ -48,16 +48,6 @@ for line in file:
     elif title[0] != '"':
         format = '@book'
 
-    # title = titleSearch.search(line)
-    # title = title.group()
-    # split = title.split('.')
-    # title = split[0]
-    # if title[0] == '"':
-    #     title = title[1:]
-    #     format = 'excerpt'
-    # elif title[0] != '"':
-    #     format = '@book'
-
     if format == 'excerpt':
         journalPages = journalPagesSearch.search(line)
         containingVolumeInfo = containingVolumeInfoSearch.search(line)
