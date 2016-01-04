@@ -23,13 +23,11 @@ def getAuthor(search):
         return author
     else:
         return author
-
 def getPubDate(search):
     pubDate = pubDateSearch.search(search)
     pubDate = pubDate.group()
     pubDate = pubDate[:4]
     return pubDate
-
 def getTitle(search):
     title = titleSearch.search(search)
     title = title.group()
@@ -67,14 +65,17 @@ for line in file:
             pages = re.search('(\d*-\d*)(?=\.)', bookInfo).group()
             bookTitle = containingVolumeSearch.search(bookInfo).group()
 
+    authorLast = author.split(',')[0].lower()
+    titleFirst = title.split(' ')[0].lower()
+    citekey = authorLast + pubDate + titleFirst
+
     print '---'
-    print line
+    print line + '---'
     if format == '@book':
-        print format + '{'
-        print ' author: "' + author + '",'
-        print ' year: "' + pubDate + '",'
-        print ' title: "' + title + '",'
-        print '}'
+        print 'format: ' + format
+        print 'author: ' + author
+        print 'year: ' + pubDate
+        print 'title: ' + title
         print
     elif format == '@article':
         print format + '{'
@@ -99,38 +100,40 @@ for line in file:
         print '}'
         print
 
-    prompt = str(raw_input("Add entry to bibliography? (y/n): "))
+    prompt = str(raw_input("Add entry to bibliography? ([y]es/[s]kip/[e]dit): "))
     if prompt[0] == 'y':
         if format == '@book':
-            output.write(format + '{\n')
-            output.write(' author: "' + author + '",\n')
-            output.write(' year: "' + pubDate + '",\n')
-            output.write(' title: "' + title + '",\n')
+            output.write(format + '{' + citekey + ',\n')
+            output.write(' author = "' + author + '",\n')
+            output.write(' year = "' + pubDate + '",\n')
+            output.write(' title = "' + title + '",\n')
             output.write('}\n')
             output.write('\n')
         elif format == '@article':
-            output.write(format + '{\n')
-            output.write(' author: "' + author + '",\n')
-            output.write(' year: "' + pubDate + '",\n')
-            output.write(' title: "' + title + '",\n')
-            output.write(' journal: "' + journal + '",\n')
+            output.write(format + '{' + citekey + ',\n')
+            output.write(' author = "' + author + '",\n')
+            output.write(' year = "' + pubDate + '",\n')
+            output.write(' title = "' + title + '",\n')
+            output.write(' journal = "' + journal + '",\n')
             if volumeNum:
-                output.write(' volume: "' + volume + '",\n')
+                output.write(' volume = "' + volume + '",\n')
             if issueNum:
-                output.write(' issue: "' + issue + '",\n')
-            output.write(' pages: "' + pages + '"\n')
+                output.write(' issue = "' + issue + '",\n')
+            output.write(' pages = "' + pages + '"\n')
             output.write('}\n')
             output.write('\n')
         elif format == '@section':
-            output.write(format + '{\n')
-            output.write(' author: "' + author + '",\n')
-            output.write(' year: "' + pubDate + '",\n')
-            output.write(' title: "' + title + '",\n')
-            output.write(' book: "' + bookTitle + '",\n')
-            output.write(' pages: "' + pages + '"\n')
+            output.write(format + '{' + citekey + ',\n')
+            output.write(' author = "' + author + '",\n')
+            output.write(' year = "' + pubDate + '",\n')
+            output.write(' title = "' + title + '",\n')
+            output.write(' book = "' + bookTitle + '",\n')
+            output.write(' pages = "' + pages + '"\n')
             output.write('}\n')
             output.write('\n')
-    elif prompt[0] == 'n':
-        print 'Skipping'
+    elif prompt[0] == 's':
+        print 'Skipping\n'
+    elif prompt[0] == 'e':
+        print 'Edits should be supported soon'
 
 file.close()
