@@ -34,6 +34,9 @@ def getTitle(search):
     split = title.split('.')
     title = split[0]
     return title
+def edit(term):
+    editedTerm = str(raw_input(term + ': '))
+    return editedTerm
 
 for line in file:
     author = getAuthor(line)
