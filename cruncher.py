@@ -67,6 +67,38 @@ for line in file:
             pages = re.search('(\d*-\d*)(?=\.)', bookInfo).group()
             bookTitle = containingVolumeSearch.search(bookInfo).group()
 
+    print '---'
+    print line
+    if format == '@book':
+        print format + '{'
+        print ' author: "' + author + '",'
+        print ' year: "' + pubDate + '",'
+        print ' title: "' + title + '",'
+        print '}'
+        print
+    elif format == '@article':
+        print format + '{'
+        print ' author: "' + author + '",'
+        print ' year: "' + pubDate + '",'
+        print ' title: "' + title + '",'
+        print ' journal: "' + journal + '",'
+        if volumeNum:
+            print ' volume: "' + volume + '",'
+        if issueNum:
+            print ' issue: "' + issue + '",'
+        print ' pages: "' + pages + '"'
+        print '}'
+        print
+    elif format == '@section':
+        print format + '{'
+        print ' author: "' + author + '",'
+        print ' year: "' + pubDate + '",'
+        print ' title: "' + title + '",'
+        print ' book: "' + bookTitle + '",'
+        print ' pages: "' + pages + '"'
+        print '}'
+        print
+
     prompt = str(raw_input("Add entry to bibliography? (y/n): "))
     if prompt[0] == 'y':
         if format == '@book':
@@ -98,5 +130,7 @@ for line in file:
             output.write(' pages: "' + pages + '"\n')
             output.write('}\n')
             output.write('\n')
+    elif prompt[0] == 'n':
+        print 'Skipping'
 
 file.close()
