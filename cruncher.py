@@ -15,25 +15,48 @@ journalPagesSearch = re.compile('(?::\s*)(\d*-\d*)')
 containingVolumeInfoSearch = re.compile('(?<=( In ))(.*\d*\.)')
 containingVolumeSearch = re.compile('(.*)(?=, \d*-\d*\.)')
 
-for line in file:
-    author = authorSearch.match(line)
+def getAuthor(search):
+    author = authorSearch.match(search)
     author = author.group().rstrip()
     if author[len(author)-1] == ',':
         author = author[:len(author)-1]
+        return author
+    else:
+        return author
 
-    pubDate = pubDateSearch.search(line)
+def getPubDate(search):
+    pubDate = pubDateSearch.search(search)
     pubDate = pubDate.group()
     pubDate = pubDate[:4]
+    return pubDate
 
-    title = titleSearch.search(line)
+def getTitle(search):
+    title = titleSearch.search(search)
     title = title.group()
     split = title.split('.')
     title = split[0]
+    return title
+
+for line in file:
+    author = getAuthor(line)
+    pubDate = getPubDate(line)
+    title = getTitle(line)
+
     if title[0] == '"':
         title = title[1:]
         format = 'excerpt'
     elif title[0] != '"':
         format = '@book'
+
+    # title = titleSearch.search(line)
+    # title = title.group()
+    # split = title.split('.')
+    # title = split[0]
+    # if title[0] == '"':
+    #     title = title[1:]
+    #     format = 'excerpt'
+    # elif title[0] != '"':
+    #     format = '@book'
 
     if format == 'excerpt':
         journalPages = journalPagesSearch.search(line)
