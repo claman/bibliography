@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import re
 import find
+import regexes
 
 output = open('output.bib', 'w')
 
@@ -12,20 +13,21 @@ with open('biblio.txt', 'r') as file:
         title, format = brand[0], brand[1]
 
         if format == '@book':
-            publishingInfo = find.publishingInfoSearch.search(line).group()
-            pubExtract = find.publishingInfoExtract.search(
+            publishingInfo = regexes.publishingInfoSearch.search(line).group()
+            pubExtract = regexes.publishingInfoExtract.search(
                 publishingInfo).group()
             pubExtract = pubExtract.split(': ')
             publisher = pubExtract[1]
             publishedCity = pubExtract[0]
         elif format == 'excerpt':
-            journalPages = find.journalPagesSearch.search(line)
-            containingVolumeInfo = find.containingVolumeInfoSearch.search(line)
+            journalPages = regexes.journalPagesSearch.search(line)
+            containingVolumeInfo = regexes.containingVolumeInfoSearch.search(
+                line)
             if journalPages:
                 format = '@article'
-                journal = find.journalSearch.search(line).group()
-                volumeNum = find.volumeSearch.search(journal)
-                issueNum = find.issueSearch.search(journal)
+                journal = regexes.journalSearch.search(line).group()
+                volumeNum = regexes.volumeSearch.search(journal)
+                issueNum = regexes.issueSearch.search(journal)
                 if volumeNum:
                     volume = volumeNum.group()
                 if issueNum:
@@ -38,10 +40,10 @@ with open('biblio.txt', 'r') as file:
                 bookInfo = re.search('(.*\d\.)',
                     containingVolumeInfo.group()).group()
                 pages = re.search('(\d*-\d*)(?=\.)', bookInfo).group()
-                bookTitle = find.containingVolumeSearch.search(
+                bookTitle = regexes.containingVolumeSearch.search(
                     bookInfo).group()
-                publishingInfo = find.publishingInfoSearch.search(line).group()
-                pubExtract = find.publishingInfoExtract.search(
+                publishingInfo = regexes.publishingInfoSearch.search(line).group()
+                pubExtract = regexes.publishingInfoExtract.search(
                     publishingInfo).group()
                 pubExtract = pubExtract.split(': ')
                 publisher = pubExtract[1]
