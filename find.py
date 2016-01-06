@@ -3,8 +3,9 @@ import re
 
 options = ('y',  'yep', 'yes', 'yeah', 's', 'skip', 'e', 'edit')
 positive = ('y', 'yep', 'yes', 'yeah')
-negative = ('n', 'no', 'nop', 'nope')
+skipping = ('s', 'skip')
 editing = ('e', 'edit')
+citations = ('article', 'art', 'a', 'book', 'b', 'section', 'sec', 's')
 
 authorSearch = re.compile('^[\D]*\D')
 pubDateSearch = re.compile('\d{4}\.')

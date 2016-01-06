@@ -86,7 +86,7 @@ with open('biblio.txt', 'r') as file:
             print '}'
             print
 
-        prompt = find.userPrompt('Add entry to bibliography? ([y]es/[[s]kip/[e]dit): ')
+        prompt = find.userPrompt('Add entry to bibliography? ([y]es/[s]kip/[e]dit): ')
         if prompt[1] in find.options:
             if prompt[1] in find.positive:
                 if format == '@book':
@@ -122,12 +122,11 @@ with open('biblio.txt', 'r') as file:
                     output.write(' publishedCity = "' + publishedCity + '",\n')
                     output.write('}\n')
                     output.write('\n')
-            elif prompt[1] in find.negative:
+            elif prompt[1] in find.skipping:
                 print 'Skipping\n'
                 print
             elif prompt[1] in find.editing:
-                format = str(raw_input(
-                    'Enter citation format (book, article, or section): '))
+                format = find.userPrompt('Enter citation format (book, article, or section): ')
                 if format == 'book':
                     output.write(format + '{' + edit('citekey') + ',\n')
                     output.write(' author = "' + edit('author') + '",\n')
@@ -165,7 +164,5 @@ with open('biblio.txt', 'r') as file:
                         'publishedCity') + '",\n')
                     output.write('}\n')
                     output.write('\n')
-        elif prompt not in find.options:
-            pass
 
 output.close()
