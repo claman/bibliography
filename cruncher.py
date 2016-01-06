@@ -41,6 +41,10 @@ def edit(term):
     editedTerm = str(raw_input(term + ': '))
     return editedTerm
 
+options = ('y','s','e')
+positive = ('y', 'yep', 'yes', 'yeah')
+negative = ('n', 'no', 'nop', 'nope')
+
 for line in file:
     author = getAuthor(line)
     pubDate = getPubDate(line)
@@ -71,7 +75,8 @@ for line in file:
             if issueNum:
                 issue = issueNum.group()
             pages = re.search('(\d*-\d*)', journalPages.group()).group()
-            journal = re.search('(\D*)(?=\s(\d|\())', journal).group()
+            if volumeNum or issueNum:
+                journal = re.search('(\D*)(?=\s(\d|\())', journal).group()
         elif containingVolumeInfo:
             format = '@section'
             bookInfo = re.search('(.*\d\.)', containingVolumeInfo.group()).group()
@@ -122,72 +127,85 @@ for line in file:
         print '}'
         print
 
+
     prompt = str(raw_input("Add entry to bibliography? ([y]es/[s]kip/[e]dit): "))
-    if prompt[0] == 'y':
-        if format == '@book':
-            output.write(format + '{' + citekey + ',\n')
-            output.write(' author = "' + author + '",\n')
-            output.write(' year = "' + pubDate + '",\n')
-            output.write(' title = "' + title + '",\n')
-            output.write('}\n')
-            output.write('\n')
-        elif format == '@article':
-            output.write(format + '{' + citekey + ',\n')
-            output.write(' author = "' + author + '",\n')
-            output.write(' year = "' + pubDate + '",\n')
-            output.write(' title = "' + title + '",\n')
-            output.write(' journal = "' + journal + '",\n')
-            if volumeNum:
-                output.write(' volume = "' + volume + '",\n')
-            if issueNum:
-                output.write(' issue = "' + issue + '",\n')
-            output.write(' pages = "' + pages + '"\n')
-            output.write('}\n')
-            output.write('\n')
-        elif format == '@section':
-            output.write(format + '{' + citekey + ',\n')
-            output.write(' author = "' + author + '",\n')
-            output.write(' year = "' + pubDate + '",\n')
-            output.write(' title = "' + title + '",\n')
-            output.write(' book = "' + bookTitle + '",\n')
-            output.write(' pages = "' + pages + '"\n')
-            output.write('}\n')
-            output.write('\n')
-    elif prompt[0] == 's':
-        print 'Skipping\n'
-    elif prompt[0] == 'e':
-        format = str(raw_input('Enter citation format (book, article, or section): '))
-        if format == 'book':
-            output.write(format + '{' + edit('citekey') + ',\n')
-            output.write(' author = "' + edit('author') + '",\n')
-            output.write(' year = "' + edit('pubDate') + '",\n')
-            output.write(' title = "' + edit('title') + '",\n')
-            output.write('}\n')
-            output.write('\n')
-        elif format == 'article':
-            print "Not yet supported"
-        #     output.write(format + '{' + citekey + ',\n')
-        #     output.write(' author = "' + author + '",\n')
-        #     output.write(' year = "' + pubDate + '",\n')
-        #     output.write(' title = "' + title + '",\n')
-        #     output.write(' journal = "' + journal + '",\n')
-        #     if volumeNum:
-        #         output.write(' volume = "' + volume + '",\n')
-        #     if issueNum:
-        #         output.write(' issue = "' + issue + '",\n')
-        #     output.write(' pages = "' + pages + '"\n')
-        #     output.write('}\n')
-        #     output.write('\n')
-        elif format == 'section':
-            print "Not yet supported"
-        #     output.write(format + '{' + citekey + ',\n')
-        #     output.write(' author = "' + author + '",\n')
-        #     output.write(' year = "' + pubDate + '",\n')
-        #     output.write(' title = "' + title + '",\n')
-        #     output.write(' book = "' + bookTitle + '",\n')
-        #     output.write(' pages = "' + pages + '"\n')
-        #     output.write('}\n')
-        #     output.write('\n')
+    if prompt in options:
+        if prompt in positive:
+            if format == '@book':
+                output.write(format + '{' + citekey + ',\n')
+                output.write(' author = "' + author + '",\n')
+                output.write(' year = "' + pubDate + '",\n')
+                output.write(' title = "' + title + '",\n')
+                output.write(' publisher = "' + publisher + '",\n')
+                output.write(' publishedCity = "' + publishedCity + '",\n')
+                output.write('}\n')
+                output.write('\n')
+            elif format == '@article':
+                output.write(format + '{' + citekey + ',\n')
+                output.write(' author = "' + author + '",\n')
+                output.write(' year = "' + pubDate + '",\n')
+                output.write(' title = "' + title + '",\n')
+                output.write(' journal = "' + journal + '",\n')
+                if volumeNum:
+                    output.write(' volume = "' + volume + '",\n')
+                if issueNum:
+                    output.write(' issue = "' + issue + '",\n')
+                output.write(' pages = "' + pages + '"\n')
+                output.write('}\n')
+                output.write('\n')
+            elif format == '@section':
+                output.write(format + '{' + citekey + ',\n')
+                output.write(' author = "' + author + '",\n')
+                output.write(' year = "' + pubDate + '",\n')
+                output.write(' title = "' + title + '",\n')
+                output.write(' book = "' + bookTitle + '",\n')
+                output.write(' pages = "' + pages + '"\n')
+                output.write(' publisher = "' + publisher + '",\n')
+                output.write(' publishedCity = "' + publishedCity + '",\n')
+                output.write('}\n')
+                output.write('\n')
+        elif prompt in negative:
+            print 'Skipping\n'
+            print
+        elif prompt[0] == 'e':
+            format = str(raw_input('Enter citation format (book, article, or section): '))
+            if format == 'book':
+                output.write(format + '{' + edit('citekey') + ',\n')
+                output.write(' author = "' + edit('author') + '",\n')
+                output.write(' year = "' + edit('pubDate') + '",\n')
+                output.write(' title = "' + edit('title') + '",\n')
+                output.write(' publisher = "' + edit('publisher') + '",\n')
+                output.write(' publishedCity = "' + edit('publishedCity') + '",\n')
+                output.write('}\n')
+                output.write('\n')
+            elif format == 'article':
+                output.write(format + '{' + edit('citekey') + ',\n')
+                output.write(' author = "' + edit('author') + '",\n')
+                output.write(' year = "' + edit('pubDate') + '",\n')
+                output.write(' title = "' + edit('title') + '",\n')
+                output.write(' journal = "' + edit('journal') + '",\n')
+                volumePrompt = str(raw_input('Specific volume (y/n): '))
+                if volumePrompt == 'y':
+                    output.write(' volume = "' + edit('volume') + '",\n')
+                issuePrompt = str(raw_input('Specific issue (y/n): '))
+                if issuePrompt == 'y':
+                    output.write(' issue = "' + edit('issue') + '",\n')
+                output.write(' pages = "' + edit('pages') + '"\n')
+                output.write('}\n')
+                output.write('\n')
+            elif format == 'section':
+                output.write(format + '{' + edit('citekey') + ',\n')
+                output.write(' author = "' + edit('author') + '",\n')
+                output.write(' year = "' + edit('pubDate') + '",\n')
+                output.write(' title = "' + edit('title') + '",\n')
+                output.write(' book = "' + edit('bookTitle') + '",\n')
+                output.write(' pages = "' + edit('pages') + '"\n')
+                output.write(' publisher = "' + edit('publisher') + '",\n')
+                output.write(' publishedCity = "' + edit('publishedCity') + '",\n')
+                output.write('}\n')
+                output.write('\n')
+    elif prompt not in options:
+        pass
 
 file.close()
 output.close()
