@@ -1,6 +1,11 @@
 #!/usr/bin/python
 import re
 
+options = ('y',  'yep', 'yes', 'yeah', 's', 'skip', 'e', 'edit')
+positive = ('y', 'yep', 'yes', 'yeah')
+negative = ('n', 'no', 'nop', 'nope')
+editing = ('e', 'edit')
+
 authorSearch = re.compile('^[\D]*\D')
 pubDateSearch = re.compile('\d{4}\.')
 titleSearch = re.compile('(?<=\d{4}\. )(.*(\."|\. ))')
@@ -31,7 +36,15 @@ def getTitle(search):
     title = title.group()
     split = title.split('.')
     title = split[0]
-    return title
+    if title[0] != '"':
+        return title, '@book'
+    else:
+        return title, 'excerpt'
+def userPrompt(prompt):
+    while True:
+        command = str(raw_input(prompt))
+        if command in options:
+            return True, command
 def edit(term):
     editedTerm = str(raw_input(term + ': '))
     return editedTerm

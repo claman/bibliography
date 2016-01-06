@@ -4,21 +4,12 @@ import find
 
 output = open('output.bib', 'w')
 
-options = ('y', 's', 'e')
-positive = ('y', 'yep', 'yes', 'yeah')
-negative = ('n', 'no', 'nop', 'nope')
-
 with open('biblio.txt', 'r') as file:
     for line in file:
         author = find.getAuthor(line)
         pubDate = find.getPubDate(line)
-        title = find.getTitle(line)
-
-        if title[0] == '"':
-            title = title[1:]
-            format = 'excerpt'
-        elif title[0] != '"':
-            format = '@book'
+        brand = find.getTitle(line)
+        title, format = brand[0], brand[1]
 
         if format == '@book':
             publishingInfo = find.publishingInfoSearch.search(line).group()
@@ -95,10 +86,9 @@ with open('biblio.txt', 'r') as file:
             print '}'
             print
 
-        prompt = str(raw_input(
-            "Add entry to bibliography? ([y]es/[s]kip/[e]dit): "))
-        if prompt in options:
-            if prompt in positive:
+        prompt = find.userPrompt('Add entry to bibliography? ([y]es/[[s]kip/[e]dit): ')
+        if prompt[1] in find.options:
+            if prompt[1] in find.positive:
                 if format == '@book':
                     output.write(format + '{' + citekey + ',\n')
                     output.write(' author = "' + author + '",\n')
@@ -132,10 +122,10 @@ with open('biblio.txt', 'r') as file:
                     output.write(' publishedCity = "' + publishedCity + '",\n')
                     output.write('}\n')
                     output.write('\n')
-            elif prompt in negative:
+            elif prompt[1] in find.negative:
                 print 'Skipping\n'
                 print
-            elif prompt[0] == 'e':
+            elif prompt[1] in find.editing:
                 format = str(raw_input(
                     'Enter citation format (book, article, or section): '))
                 if format == 'book':
@@ -175,7 +165,7 @@ with open('biblio.txt', 'r') as file:
                         'publishedCity') + '",\n')
                     output.write('}\n')
                     output.write('\n')
-        elif prompt not in options:
+        elif prompt not in find.options:
             pass
 
 output.close()
