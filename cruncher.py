@@ -22,7 +22,8 @@ with open('biblio.txt', 'r') as file:
 
         if format == '@book':
             publishingInfo = find.publishingInfoSearch.search(line).group()
-            pubExtract = find.publishingInfoExtract.search(publishingInfo).group()
+            pubExtract = find.publishingInfoExtract.search(
+                publishingInfo).group()
             pubExtract = pubExtract.split(': ')
             publisher = pubExtract[1]
             publishedCity = pubExtract[0]
@@ -44,12 +45,13 @@ with open('biblio.txt', 'r') as file:
             elif containingVolumeInfo:
                 format = '@section'
                 bookInfo = re.search('(.*\d\.)',
-                  containingVolumeInfo.group()).group()
+                    containingVolumeInfo.group()).group()
                 pages = re.search('(\d*-\d*)(?=\.)', bookInfo).group()
-                bookTitle = find.containingVolumeSearch.search(bookInfo).group()
+                bookTitle = find.containingVolumeSearch.search(
+                    bookInfo).group()
                 publishingInfo = find.publishingInfoSearch.search(line).group()
                 pubExtract = find.publishingInfoExtract.search(
-                  publishingInfo).group()
+                    publishingInfo).group()
                 pubExtract = pubExtract.split(': ')
                 publisher = pubExtract[1]
                 publishedCity = pubExtract[0]
@@ -93,7 +95,8 @@ with open('biblio.txt', 'r') as file:
             print '}'
             print
 
-        prompt = str(raw_input("Add entry to bibliography? ([y]es/[s]kip/[e]dit): "))
+        prompt = str(raw_input(
+            "Add entry to bibliography? ([y]es/[s]kip/[e]dit): "))
         if prompt in options:
             if prompt in positive:
                 if format == '@book':
@@ -133,14 +136,16 @@ with open('biblio.txt', 'r') as file:
                 print 'Skipping\n'
                 print
             elif prompt[0] == 'e':
-                format = str(raw_input('Enter citation format (book, article, or section): '))
+                format = str(raw_input(
+                    'Enter citation format (book, article, or section): '))
                 if format == 'book':
                     output.write(format + '{' + edit('citekey') + ',\n')
                     output.write(' author = "' + edit('author') + '",\n')
                     output.write(' year = "' + edit('pubDate') + '",\n')
                     output.write(' title = "' + edit('title') + '",\n')
                     output.write(' publisher = "' + edit('publisher') + '",\n')
-                    output.write(' publishedCity = "' + edit('publishedCity') + '",\n')
+                    output.write(' publishedCity = "' + edit(
+                        'publishedCity') + '",\n')
                     output.write('}\n')
                     output.write('\n')
                 elif format == 'article':
@@ -166,7 +171,8 @@ with open('biblio.txt', 'r') as file:
                     output.write(' book = "' + edit('bookTitle') + '",\n')
                     output.write(' pages = "' + edit('pages') + '"\n')
                     output.write(' publisher = "' + edit('publisher') + '",\n')
-                    output.write(' publishedCity = "' + edit('publishedCity') + '",\n')
+                    output.write(' publishedCity = "' + edit(
+                        'publishedCity') + '",\n')
                     output.write('}\n')
                     output.write('\n')
         elif prompt not in options:
