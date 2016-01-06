@@ -1,20 +1,8 @@
 #!/usr/bin/python
 import re
-from functions import getAuthor, getPubDate, getTitle, edit
+import find
 
 output = open('output.bib', 'w')
-
-authorSearch = re.compile('^[\D]*\D')
-pubDateSearch = re.compile('\d{4}\.')
-titleSearch = re.compile('(?<=\d{4}\. )(.*(\."|\. ))')
-journalSearch = re.compile('(?<="\s)(.*)(?=:)')
-volumeSearch = re.compile('(?<=\D)(\d*)(?=\()')
-issueSearch = re.compile('(?<=\()(\d*)(?=\))')
-journalPagesSearch = re.compile('(?::\s*)(\d*-\d*)')
-containingVolumeInfoSearch = re.compile('(?<=( In ))(.*\d*\.)')
-containingVolumeSearch = re.compile('(.*)(?=, \d*-\d*\.)')
-publishingInfoSearch = re.compile('(?<=\d{4}\. )(.*)')
-publishingInfoExtract = re.compile('(?<=\. )(.*)(?=\.)')
 
 options = ('y', 's', 'e')
 positive = ('y', 'yep', 'yes', 'yeah')
@@ -22,9 +10,9 @@ negative = ('n', 'no', 'nop', 'nope')
 
 with open('biblio.txt', 'r') as file:
     for line in file:
-        author = getAuthor(line)
-        pubDate = getPubDate(line)
-        title = getTitle(line)
+        author = find.getAuthor(line)
+        pubDate = find.getPubDate(line)
+        title = find.getTitle(line)
 
         if title[0] == '"':
             title = title[1:]
@@ -33,19 +21,19 @@ with open('biblio.txt', 'r') as file:
             format = '@book'
 
         if format == '@book':
-            publishingInfo = publishingInfoSearch.search(line).group()
-            pubExtract = publishingInfoExtract.search(publishingInfo).group()
+            publishingInfo = find.publishingInfoSearch.search(line).group()
+            pubExtract = find.publishingInfoExtract.search(publishingInfo).group()
             pubExtract = pubExtract.split(': ')
             publisher = pubExtract[1]
             publishedCity = pubExtract[0]
         elif format == 'excerpt':
-            journalPages = journalPagesSearch.search(line)
-            containingVolumeInfo = containingVolumeInfoSearch.search(line)
+            journalPages = find.journalPagesSearch.search(line)
+            containingVolumeInfo = find.containingVolumeInfoSearch.search(line)
             if journalPages:
                 format = '@article'
-                journal = journalSearch.search(line).group()
-                volumeNum = volumeSearch.search(journal)
-                issueNum = issueSearch.search(journal)
+                journal = find.journalSearch.search(line).group()
+                volumeNum = find.volumeSearch.search(journal)
+                issueNum = find.issueSearch.search(journal)
                 if volumeNum:
                     volume = volumeNum.group()
                 if issueNum:
@@ -58,9 +46,9 @@ with open('biblio.txt', 'r') as file:
                 bookInfo = re.search('(.*\d\.)',
                   containingVolumeInfo.group()).group()
                 pages = re.search('(\d*-\d*)(?=\.)', bookInfo).group()
-                bookTitle = containingVolumeSearch.search(bookInfo).group()
-                publishingInfo = publishingInfoSearch.search(line).group()
-                pubExtract = publishingInfoExtract.search(
+                bookTitle = find.containingVolumeSearch.search(bookInfo).group()
+                publishingInfo = find.publishingInfoSearch.search(line).group()
+                pubExtract = find.publishingInfoExtract.search(
                   publishingInfo).group()
                 pubExtract = pubExtract.split(': ')
                 publisher = pubExtract[1]
