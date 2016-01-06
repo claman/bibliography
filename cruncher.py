@@ -71,6 +71,7 @@ for line in file:
             if issueNum:
                 issue = issueNum.group()
             pages = re.search('(\d*-\d*)', journalPages.group()).group()
+            journal = re.search('(\D*)(?=\s(\d|\())', journal).group()
         elif containingVolumeInfo:
             format = '@section'
             bookInfo = re.search('(.*\d\.)', containingVolumeInfo.group()).group()
