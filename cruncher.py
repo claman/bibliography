@@ -155,7 +155,7 @@ for line in file:
     elif prompt[0] == 's':
         print 'Skipping\n'
     elif prompt[0] == 'e':
-        format = str(raw_input('Enter citation format (book, article, or citation): '))
+        format = str(raw_input('Enter citation format (book, article, or section): '))
         if format == 'book':
             output.write(format + '{' + edit('citekey') + ',\n')
             output.write(' author = "' + edit('author') + '",\n')
@@ -163,7 +163,8 @@ for line in file:
             output.write(' title = "' + edit('title') + '",\n')
             output.write('}\n')
             output.write('\n')
-        # elif format == 'article':
+        elif format == 'article':
+            print "Not yet supported"
         #     output.write(format + '{' + citekey + ',\n')
         #     output.write(' author = "' + author + '",\n')
         #     output.write(' year = "' + pubDate + '",\n')
@@ -176,7 +177,8 @@ for line in file:
         #     output.write(' pages = "' + pages + '"\n')
         #     output.write('}\n')
         #     output.write('\n')
-        # elif format == 'section':
+        elif format == 'section':
+            print "Not yet supported"
         #     output.write(format + '{' + citekey + ',\n')
         #     output.write(' author = "' + author + '",\n')
         #     output.write(' year = "' + pubDate + '",\n')
