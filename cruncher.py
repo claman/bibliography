@@ -9,16 +9,11 @@ with open('biblio.txt', 'r') as file:
     for line in file:
         author = find.getAuthor(line)
         pubDate = find.getPubDate(line)
-        brand = find.getTitle(line)
-        title, format = brand[0], brand[1]
+        titleInfo = find.getTitle(line)
+        title, format = titleInfo[0], titleInfo[1]
 
         if format == '@book':
-            publishingInfo = regexes.publishingInfoSearch.search(line).group()
-            pubExtract = regexes.publishingInfoExtract.search(
-                publishingInfo).group()
-            pubExtract = pubExtract.split(': ')
-            publisher = pubExtract[1]
-            publishedCity = pubExtract[0]
+            result = find.getBook(line, author, pubDate, title, format)
         elif format == 'excerpt':
             journalPages = regexes.journalPagesSearch.search(line)
             containingVolumeInfo = regexes.containingVolumeInfoSearch.search(
@@ -55,13 +50,13 @@ with open('biblio.txt', 'r') as file:
 
         print '---'
         print line + '---'
-        if format == '@book':
-            print 'format: ' + format
-            print 'author: ' + author
-            print 'year: ' + pubDate
-            print 'title: ' + title
-            print 'publisher: ' + publisher
-            print 'city: ' + publishedCity
+        if result['format'] == '@book':
+            print 'format: ' + result['format']
+            print 'author: ' + result['author']
+            print 'year: ' + result['pubDate']
+            print 'title: ' + result['title']
+            print 'publisher: ' + result['publisher']
+            print 'city: ' + result['publishedCity']
             print
         elif format == '@article':
             print format + '{'

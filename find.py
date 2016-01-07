@@ -29,6 +29,16 @@ def getTitle(search):
         return title, '@book'
     else:
         return title, 'excerpt'
+def getBook(entry, author, pubDate, title, format):
+    publishingInfo = regexes.publishingInfoSearch.search(entry).group()
+    pubExtract = regexes.publishingInfoExtract.search(
+        publishingInfo).group()
+    pubExtract = pubExtract.split(': ')
+    publisher = pubExtract[1]
+    publishedCity = pubExtract[0]
+    return dict([('author', author), ('pubDate', pubDate),
+        ('title', title), ('format', format), ('publisher', publisher),
+        ('publishedCity', publishedCity)])
 def userPrompt(prompt):
     while True:
         command = str(raw_input(prompt))
