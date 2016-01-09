@@ -5,7 +5,7 @@ options = ('y',  'yep', 'yes', 'yeah', 's', 'skip', 'e', 'edit')
 positive = ('y', 'yep', 'yes', 'yeah')
 skipping = ('s', 'skip')
 editing = ('e', 'edit')
-citations = ('article', 'art', 'a', 'book', 'b', 'section', 'sec', 's')
+citations = ('article', 'art', 'a', 'book', 'b', 'incollection', 'i', 'in', 'inc')
 
 def getAuthor(search):
     author = regexes.authorSearch.match(search)

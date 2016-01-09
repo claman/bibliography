@@ -31,7 +31,7 @@ with open('biblio.txt', 'r') as file:
                 if volumeNum or issueNum:
                     journal = re.search('(\D*)(?=\s(\d|\())', journal).group()
             elif containingVolumeInfo:
-                format = '@section'
+                format = '@incollection'
                 bookInfo = re.search('(.*\d\.)',
                     containingVolumeInfo.group()).group()
                 pages = re.search('(\d*-\d*)(?=\.)', bookInfo).group()
@@ -71,7 +71,7 @@ with open('biblio.txt', 'r') as file:
             print 'pages: "' + pages + '"'
             print '}'
             print
-        elif format == '@section':
+        elif format == '@incollection':
             print format + '{'
             print 'author: "' + author + '",'
             print 'year: "' + pubDate + '",'
@@ -108,7 +108,7 @@ with open('biblio.txt', 'r') as file:
                     output.write(' pages = "' + pages + '"\n')
                     output.write('}\n')
                     output.write('\n')
-                elif format == '@section':
+                elif format == '@incollection':
                     output.write(format + '{' + citekey + ',\n')
                     output.write(' author = "' + author + '",\n')
                     output.write(' year = "' + pubDate + '",\n')
@@ -123,7 +123,7 @@ with open('biblio.txt', 'r') as file:
                 print 'Skipping\n'
                 print
             elif prompt[1] in find.editing:
-                format = find.userPrompt('Enter citation format (book, article, or section): ')
+                format = find.userPrompt('Enter citation format (book, article, or incollection): ')
                 if format == 'book':
                     output.write(format + '{' + edit('citekey') + ',\n')
                     output.write(' author = "' + edit('author') + '",\n')
@@ -149,7 +149,7 @@ with open('biblio.txt', 'r') as file:
                     output.write(' pages = "' + edit('pages') + '"\n')
                     output.write('}\n')
                     output.write('\n')
-                elif format == 'section':
+                elif format == 'incollection':
                     output.write(format + '{' + edit('citekey') + ',\n')
                     output.write(' author = "' + edit('author') + '",\n')
                     output.write(' year = "' + edit('pubDate') + '",\n')
