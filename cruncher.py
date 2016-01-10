@@ -16,8 +16,6 @@ with open('biblio.txt', 'r') as file:
         elif format == 'excerpt':
             result = find.getExcerpt(line, author, pubDate, title)
 
-        print result
-
         authorLast = author.split(',')[0].lower()
         titleFirst = title.split(' ')[0].lower()
         citekey = authorLast + pubDate + titleFirst
@@ -32,29 +30,27 @@ with open('biblio.txt', 'r') as file:
             print 'publisher: ' + result['publisher']
             print 'city: ' + result['publishedCity']
             print
-        elif format == '@article':
-            print format + '{'
-            print 'author: "' + author + '",'
-            print 'year: "' + pubDate + '",'
-            print 'title: "' + title + '",'
-            print 'journal: "' + journal + '",'
-            if volumeNum:
-                print 'volume: "' + volume + '",'
-            if issueNum:
-                print 'issue: "' + issue + '",'
-            print 'pages: "' + pages + '"'
-            print '}'
+        elif result['format'] == '@article':
+            print 'format: ' + result['format']
+            print 'author: ' + result['author']
+            print 'year: ' + result['pubDate']
+            print 'title: ' + result['title']
+            print 'journal: ' + result['journal']
+            if result['volume']:
+                print 'volume: ' + result['volume']
+            if result['issue']:
+                print 'issue: ' + result['issue']
+            print 'pages: ' + result['pages']
             print
-        elif format == '@incollection':
-            print format + '{'
-            print 'author: "' + author + '",'
-            print 'year: "' + pubDate + '",'
-            print 'title: "' + title + '",'
-            print 'book: "' + bookTitle + '",'
-            print 'pages: "' + pages + '"'
-            print 'publisher: ' + publisher
-            print 'city: ' + publishedCity
-            print '}'
+        elif result['format'] == '@incollection':
+            print 'format: ' + result['format']
+            print 'author: ' + result['author']
+            print 'year: ' + result['pubDate']
+            print 'title: ' + result['title']
+            print 'book: ' + result['bookTitle']
+            print 'pages: ' + result['pages']
+            print 'publisher: ' + result['publisher']
+            print 'city: ' + result['publishedCity']
             print
 
         prompt = find.userPrompt('Add entry to bibliography? ([y]es/[s]kip/[e]dit): ')
@@ -99,39 +95,39 @@ with open('biblio.txt', 'r') as file:
             elif prompt[1] in find.editing:
                 format = find.userPrompt('Enter citation format (book, article, or incollection): ')
                 if format == 'book':
-                    output.write(format + '{' + edit('citekey') + ',\n')
-                    output.write(' author = "' + edit('author') + '",\n')
-                    output.write(' year = "' + edit('pubDate') + '",\n')
-                    output.write(' title = "' + edit('title') + '",\n')
-                    output.write(' publisher = "' + edit('publisher') + '",\n')
-                    output.write(' publishedCity = "' + edit(
+                    output.write(format + '{' + find.editInfo('citekey') + ',\n')
+                    output.write(' author = "' + find.editInfo('author') + '",\n')
+                    output.write(' year = "' + find.editInfo('pubDate') + '",\n')
+                    output.write(' title = "' + find.editInfo('title') + '",\n')
+                    output.write(' publisher = "' + find.editInfo('publisher') + '",\n')
+                    output.write(' publishedCity = "' + find.editInfo(
                         'publishedCity') + '",\n')
                     output.write('}\n')
                     output.write('\n')
                 elif format == 'article':
-                    output.write(format + '{' + edit('citekey') + ',\n')
-                    output.write(' author = "' + edit('author') + '",\n')
-                    output.write(' year = "' + edit('pubDate') + '",\n')
-                    output.write(' title = "' + edit('title') + '",\n')
-                    output.write(' journal = "' + edit('journal') + '",\n')
+                    output.write(format + '{' + find.editInfo('citekey') + ',\n')
+                    output.write(' author = "' + find.editInfo('author') + '",\n')
+                    output.write(' year = "' + find.editInfo('pubDate') + '",\n')
+                    output.write(' title = "' + find.editInfo('title') + '",\n')
+                    output.write(' journal = "' + find.editInfo('journal') + '",\n')
                     volumePrompt = str(raw_input('Specific volume (y/n): '))
                     if volumePrompt == 'y':
-                        output.write(' volume = "' + edit('volume') + '",\n')
+                        output.write(' volume = "' + find.editInfo('volume') + '",\n')
                     issuePrompt = str(raw_input('Specific issue (y/n): '))
                     if issuePrompt == 'y':
-                        output.write(' issue = "' + edit('issue') + '",\n')
-                    output.write(' pages = "' + edit('pages') + '"\n')
+                        output.write(' issue = "' + find.editInfo('issue') + '",\n')
+                    output.write(' pages = "' + find.editInfo('pages') + '"\n')
                     output.write('}\n')
                     output.write('\n')
                 elif format == 'incollection':
-                    output.write(format + '{' + edit('citekey') + ',\n')
-                    output.write(' author = "' + edit('author') + '",\n')
-                    output.write(' year = "' + edit('pubDate') + '",\n')
-                    output.write(' title = "' + edit('title') + '",\n')
-                    output.write(' book = "' + edit('bookTitle') + '",\n')
-                    output.write(' pages = "' + edit('pages') + '"\n')
-                    output.write(' publisher = "' + edit('publisher') + '",\n')
-                    output.write(' publishedCity = "' + edit(
+                    output.write(format + '{' + find.editInfo('citekey') + ',\n')
+                    output.write(' author = "' + find.editInfo('author') + '",\n')
+                    output.write(' year = "' + find.editInfo('pubDate') + '",\n')
+                    output.write(' title = "' + find.editInfo('title') + '",\n')
+                    output.write(' book = "' + find.editInfo('bookTitle') + '",\n')
+                    output.write(' pages = "' + find.editInfo('pages') + '"\n')
+                    output.write(' publisher = "' + find.editInfo('publisher') + '",\n')
+                    output.write(' publishedCity = "' + find.editInfo(
                         'publishedCity') + '",\n')
                     output.write('}\n')
                     output.write('\n')

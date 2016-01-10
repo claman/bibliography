@@ -61,10 +61,12 @@ def getArticle(entry, author, pubDate, title, journalPages):
                 ('title', title), ('format', format), ('journal', journal),
                 ('pages', pages), ('issueNum', issueNum)])
         elif volumeNum and issueNum:
+            volume = volumeNum.group()
+            issue = issueNum.group()
             return dict([('author', author), ('pubDate', pubDate),
                 ('title', title), ('format', format), ('journal', journal),
-                ('pages', pages), ('volume', volumeNum),
-                ('issueNum', issueNum)])
+                ('pages', pages), ('volume', volume),
+                ('issue', issue)])
     else:
         return dict([('author', author), ('pubDate', pubDate),
             ('title', title), ('format', format), ('journal', journal),
@@ -86,7 +88,8 @@ def getInCollection(entry, containingVolumeInfo, author, pubDate, title):
 
     return dict([('author', author), ('pubDate', pubDate),
         ('title', title), ('format', format), ('bookTitle', bookTitle),
-        ('publisher', publisher), ('publishedCity', publishedCity)])
+        ('publisher', publisher), ('publishedCity', publishedCity),
+        ('pages', pages)])
 def getExcerpt(entry, author, pubDate, title):
     journalPages = regexes.journalPagesSearch.search(entry)
     containingVolumeInfo = regexes.containingVolumeInfoSearch.search(entry)
@@ -99,6 +102,6 @@ def userPrompt(prompt):
         command = str(raw_input(prompt))
         if command in options:
             return True, command
-def edit(term):
+def editInfo(term):
     editedTerm = str(raw_input(term + ': '))
     return editedTerm
