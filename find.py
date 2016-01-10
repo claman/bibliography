@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import re
 import regexes
 
 options = ('y',  'yep', 'yes', 'yeah', 's', 'skip', 'e', 'edit')
@@ -39,6 +40,60 @@ def getBook(entry, author, pubDate, title, format):
     return dict([('author', author), ('pubDate', pubDate),
         ('title', title), ('format', format), ('publisher', publisher),
         ('publishedCity', publishedCity)])
+def getArticle(entry, author, pubDate, title, journalPages):
+    format = '@article'
+    journal = regexes.journalSearch.search(entry).group()
+    pages = re.search('(\d*-\d*)', journalPages.group()).group()
+
+    volumeNum = regexes.volumeSearch.search(journal)
+    issueNum = regexes.issueSearch.search(journal)
+
+    if volumeNum or issueNum:
+        journal = re.search('(\D*)(?=\s(\d|\())', journal).group()
+        if volumeNum and not issueNum:
+            volume = volumeNum.group()
+            return dict([('author', author), ('pubDate', pubDate),
+                ('title', title), ('format', format), ('journal', journal),
+                ('pages', pages), ('volume', volumeNum)])
+        elif issueNum and not volumeNum:
+            issue = issueNum.group()
+            return dict([('author', author), ('pubDate', pubDate),
+                ('title', title), ('format', format), ('journal', journal),
+                ('pages', pages), ('issueNum', issueNum)])
+        elif volumeNum and issueNum:
+            return dict([('author', author), ('pubDate', pubDate),
+                ('title', title), ('format', format), ('journal', journal),
+                ('pages', pages), ('volume', volumeNum),
+                ('issueNum', issueNum)])
+    else:
+        return dict([('author', author), ('pubDate', pubDate),
+            ('title', title), ('format', format), ('journal', journal),
+            ('pages', pages)])
+def getInCollection(entry, containingVolumeInfo, author, pubDate, title):
+    format = '@incollection'
+    bookInfo = re.search('(.*\d\.)',
+        containingVolumeInfo.group()).group()
+    pages = re.search('(\d*-\d*)(?=\.)', bookInfo).group()
+    bookTitle = regexes.containingVolumeSearch.search(
+        bookInfo).group()
+
+    publishingInfo = regexes.publishingInfoSearch.search(entry).group()
+    pubExtract = regexes.publishingInfoExtract.search(
+        publishingInfo).group()
+    pubExtract = pubExtract.split(': ')
+    publisher = pubExtract[1]
+    publishedCity = pubExtract[0]
+
+    return dict([('author', author), ('pubDate', pubDate),
+        ('title', title), ('format', format), ('bookTitle', bookTitle),
+        ('publisher', publisher), ('publishedCity', publishedCity)])
+def getExcerpt(entry, author, pubDate, title):
+    journalPages = regexes.journalPagesSearch.search(entry)
+    containingVolumeInfo = regexes.containingVolumeInfoSearch.search(entry)
+    if journalPages:
+        return getArticle(entry, author, pubDate, title, journalPages)
+    elif containingVolumeInfo:
+        return getInCollection(entry,containingVolumeInfo, author, pubDate, title)
 def userPrompt(prompt):
     while True:
         command = str(raw_input(prompt))

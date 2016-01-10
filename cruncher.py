@@ -1,5 +1,4 @@
 #!/usr/bin/python
-import re
 import find
 import regexes
 
@@ -15,34 +14,9 @@ with open('biblio.txt', 'r') as file:
         if format == '@book':
             result = find.getBook(line, author, pubDate, title, format)
         elif format == 'excerpt':
-            journalPages = regexes.journalPagesSearch.search(line)
-            containingVolumeInfo = regexes.containingVolumeInfoSearch.search(
-                line)
-            if journalPages:
-                format = '@article'
-                journal = regexes.journalSearch.search(line).group()
-                volumeNum = regexes.volumeSearch.search(journal)
-                issueNum = regexes.issueSearch.search(journal)
-                if volumeNum:
-                    volume = volumeNum.group()
-                if issueNum:
-                    issue = issueNum.group()
-                pages = re.search('(\d*-\d*)', journalPages.group()).group()
-                if volumeNum or issueNum:
-                    journal = re.search('(\D*)(?=\s(\d|\())', journal).group()
-            elif containingVolumeInfo:
-                format = '@incollection'
-                bookInfo = re.search('(.*\d\.)',
-                    containingVolumeInfo.group()).group()
-                pages = re.search('(\d*-\d*)(?=\.)', bookInfo).group()
-                bookTitle = regexes.containingVolumeSearch.search(
-                    bookInfo).group()
-                publishingInfo = regexes.publishingInfoSearch.search(line).group()
-                pubExtract = regexes.publishingInfoExtract.search(
-                    publishingInfo).group()
-                pubExtract = pubExtract.split(': ')
-                publisher = pubExtract[1]
-                publishedCity = pubExtract[0]
+            result = find.getExcerpt(line, author, pubDate, title)
+
+        print result
 
         authorLast = author.split(',')[0].lower()
         titleFirst = title.split(' ')[0].lower()
@@ -86,13 +60,13 @@ with open('biblio.txt', 'r') as file:
         prompt = find.userPrompt('Add entry to bibliography? ([y]es/[s]kip/[e]dit): ')
         if prompt[1] in find.options:
             if prompt[1] in find.positive:
-                if format == '@book':
+                if result['format'] == '@book':
                     output.write(format + '{' + citekey + ',\n')
-                    output.write(' author = "' + author + '",\n')
-                    output.write(' year = "' + pubDate + '",\n')
-                    output.write(' title = "' + title + '",\n')
-                    output.write(' publisher = "' + publisher + '",\n')
-                    output.write(' publishedCity = "' + publishedCity + '",\n')
+                    output.write(' author = "' + result['author'] + '",\n')
+                    output.write(' year = "' + result['pubDate'] + '",\n')
+                    output.write(' title = "' + result['title'] + '",\n')
+                    output.write(' publisher = "' + result['publisher'] + '",\n')
+                    output.write(' publishedCity = "' + result['publishedCity'] + '",\n')
                     output.write('}\n')
                     output.write('\n')
                 elif format == '@article':
