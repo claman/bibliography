@@ -54,12 +54,12 @@ def getArticle(entry, author, pubDate, title, journalPages):
             volume = volumeNum.group()
             return dict([('author', author), ('pubDate', pubDate),
                 ('title', title), ('format', format), ('journal', journal),
-                ('pages', pages), ('volume', volume)])
+                ('pages', pages), ('volume', volume), ('issue', None)])
         elif issueNum and not volumeNum:
             issue = issueNum.group()
             return dict([('author', author), ('pubDate', pubDate),
                 ('title', title), ('format', format), ('journal', journal),
-                ('pages', pages), ('issue', issue)])
+                ('pages', pages), ('volume', None), ('issue', issue)])
         elif volumeNum and issueNum:
             volume = volumeNum.group()
             issue = issueNum.group()

@@ -2,7 +2,7 @@
 import re
 
 authorSearch = re.compile('^[\D]*\D')
-pubDateSearch = re.compile('\d{4}\.')
+pubDateSearch = re.compile('\d{4}\D?(?=\.)')
 titleSearch = re.compile('(?<=\d{4}\. )(.*(\."|\. ))')
 
 journalSearch = re.compile('(?<="\s)(.*:)')

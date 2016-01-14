@@ -65,28 +65,28 @@ with open('test.txt', 'r') as file:
                     output.write(' publishedCity = "' + result['publishedCity'] + '",\n')
                     output.write('}\n')
                     output.write('\n')
-                elif format == '@article':
+                elif result['format'] == '@article':
                     output.write(format + '{' + citekey + ',\n')
-                    output.write(' author = "' + author + '",\n')
-                    output.write(' year = "' + pubDate + '",\n')
-                    output.write(' title = "' + title + '",\n')
-                    output.write(' journal = "' + journal + '",\n')
-                    if volumeNum:
-                        output.write(' volume = "' + volume + '",\n')
-                    if issueNum:
-                        output.write(' issue = "' + issue + '",\n')
-                    output.write(' pages = "' + pages + '"\n')
+                    output.write(' author = "' + result['author'] + '",\n')
+                    output.write(' year = "' + result['pubDate'] + '",\n')
+                    output.write(' title = "' + result['title'] + '",\n')
+                    output.write(' journal = "' + result['journal'] + '",\n')
+                    if result['volume']:
+                        output.write(' volume = "' + result['volume'] + '",\n')
+                    if result['issue']:
+                        output.write(' issue = "' + result['issue'] + '",\n')
+                    output.write(' pages = "' + result['pages'] + '"\n')
                     output.write('}\n')
                     output.write('\n')
-                elif format == '@incollection':
+                elif result['format'] == '@incollection':
                     output.write(format + '{' + citekey + ',\n')
-                    output.write(' author = "' + author + '",\n')
-                    output.write(' year = "' + pubDate + '",\n')
-                    output.write(' title = "' + title + '",\n')
-                    output.write(' book = "' + bookTitle + '",\n')
-                    output.write(' pages = "' + pages + '"\n')
-                    output.write(' publisher = "' + publisher + '",\n')
-                    output.write(' publishedCity = "' + publishedCity + '",\n')
+                    output.write(' author = "' + result['author'] + '",\n')
+                    output.write(' year = "' + result['pubDate'] + '",\n')
+                    output.write(' title = "' + result['title'] + '",\n')
+                    output.write(' book = "' + result['bookTitle'] + '",\n')
+                    output.write(' pages = "' + result['pages'] + '"\n')
+                    output.write(' publisher = "' + result['publisher'] + '",\n')
+                    output.write(' publishedCity = "' + result['publishedCity'] + '",\n')
                     output.write('}\n')
                     output.write('\n')
             elif prompt[1] in find.skipping:
