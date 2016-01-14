@@ -52,14 +52,15 @@ def getArticle(entry, author, pubDate, title, journalPages):
         journal = re.search('(\D*)(?=\s(\d|\())', journal).group()
         if volumeNum and not issueNum:
             volume = volumeNum.group()
+            print volume
             return dict([('author', author), ('pubDate', pubDate),
                 ('title', title), ('format', format), ('journal', journal),
-                ('pages', pages), ('volume', volumeNum)])
+                ('pages', pages), ('volume', volume)])
         elif issueNum and not volumeNum:
             issue = issueNum.group()
             return dict([('author', author), ('pubDate', pubDate),
                 ('title', title), ('format', format), ('journal', journal),
-                ('pages', pages), ('issueNum', issueNum)])
+                ('pages', pages), ('issueNum', issue)])
         elif volumeNum and issueNum:
             volume = volumeNum.group()
             issue = issueNum.group()
