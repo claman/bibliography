@@ -26,6 +26,10 @@ def getTitle(search):
     title = title.group()
     split = title.split('.')
     title = split[0]
+    if title[0] == ' ':
+        title = title[1:]
+    else:
+        pass
     if title[0] != '"':
         return title, '@book'
     else:
