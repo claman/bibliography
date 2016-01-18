@@ -34,21 +34,22 @@ def getTitle(search):
         return title, '@book'
     else:
         return title, 'excerpt'
-# def getPublisher(searchTerm):
-#     for i in range(0, 3):
-#         publisher = regexes.publishingSearch.search(searchTerm).group()
-#     publisher = publisher.split(': ')
-#     return (publisher[0], publisher[1])
+def getPublisher(searchTerm):
+    publishing = regexes.publishingSearch.search(searchTerm).group()
+    publishing = publishing.split(': ')
+    cityInfo = publishing[0]; city = cityInfo[1:]
+    pub = publishing[1]; pubLen = len(pub) - 1
+    if pub[pubLen] == '.':
+        publisher = pub[:pubLen]
+    else:
+        publisher = pub
+    return (city, publisher)
 def getBook(entry, author, pubDate, title, format):
-    publishingInfo = regexes.publishingInfoSearch.search(entry).group()
-    pubExtract = regexes.publishingInfoExtract.search(
-        publishingInfo).group()
-    pubExtract = pubExtract.split(': ')
-    publisher = pubExtract[1]
-    publishedCity = pubExtract[0]
+    publishingInfo = getPublisher(entry)
     return dict([('author', author), ('pubDate', pubDate),
-        ('title', title), ('format', format), ('publisher', publisher),
-        ('publishedCity', publishedCity)])
+        ('title', title), ('format', format),
+        ('publisher', publishingInfo[1]),
+        ('publishedCity', publishingInfo[0])])
 def getArticle(entry, author, pubDate, title, journalPages):
     format = '@article'
     journal = regexes.journalSearch.search(entry).group()
@@ -105,7 +106,8 @@ def getExcerpt(entry, author, pubDate, title):
     if journalPages:
         return getArticle(entry, author, pubDate, title, journalPages)
     elif containingVolumeInfo:
-        return getInCollection(entry,containingVolumeInfo, author, pubDate, title)
+        return getInCollection(entry,containingVolumeInfo, author,
+            pubDate, title)
 def userPrompt(prompt):
     while True:
         command = str(raw_input(prompt))
