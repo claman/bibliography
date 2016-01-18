@@ -15,3 +15,5 @@ containingVolumeSearch = re.compile('(.*)(?=, \d*-\d*\.)')
 
 publishingInfoSearch = re.compile('(?<=\d{4}..)(.*)')
 publishingInfoExtract = re.compile('(?<=\. )(.*)(?=\.)')
+
+publishingSearch = re.compile('.*\. (.+)')

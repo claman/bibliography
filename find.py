@@ -34,6 +34,10 @@ def getTitle(search):
         return title, '@book'
     else:
         return title, 'excerpt'
+# def getPublisher(searchTerm):
+#     publisher = regexes.publishingSearch.search(searchTerm).group()
+#     publisher = publisher.split(': ')
+#     return (publisher[0], publisher[1])
 def getBook(entry, author, pubDate, title, format):
     publishingInfo = regexes.publishingInfoSearch.search(entry).group()
     pubExtract = regexes.publishingInfoExtract.search(
