@@ -88,9 +88,7 @@ def getInCollection(entry, containingVolumeInfo, author, pubDate, title):
     pages = re.search('(\d*-\d*)(?=\.)', bookInfo).group()
     bookTitle = regexes.containingVolumeSearch.search(
         bookInfo).group()
-
     publishingInfo = getPublisher(entry)
-
     return dict([('author', author), ('pubDate', pubDate),
         ('title', title), ('format', format), ('bookTitle', bookTitle),
         ('publisher', publishingInfo[1]), ('publishedCity', publishingInfo[0]),
