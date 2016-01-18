@@ -89,16 +89,11 @@ def getInCollection(entry, containingVolumeInfo, author, pubDate, title):
     bookTitle = regexes.containingVolumeSearch.search(
         bookInfo).group()
 
-    publishingInfo = regexes.publishingInfoSearch.search(entry).group()
-    pubExtract = regexes.publishingInfoExtract.search(
-        publishingInfo).group()
-    pubExtract = pubExtract.split(': ')
-    publisher = pubExtract[1]
-    publishedCity = pubExtract[0]
+    publishingInfo = getPublisher(entry)
 
     return dict([('author', author), ('pubDate', pubDate),
         ('title', title), ('format', format), ('bookTitle', bookTitle),
-        ('publisher', publisher), ('publishedCity', publishedCity),
+        ('publisher', publishingInfo[1]), ('publishedCity', publishingInfo[0]),
         ('pages', pages)])
 def getExcerpt(entry, author, pubDate, title):
     journalPages = regexes.journalPagesSearch.search(entry)

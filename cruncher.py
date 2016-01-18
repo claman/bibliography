@@ -4,7 +4,7 @@ import regexes
 
 output = open('output.bib', 'w')
 
-with open('test.txt', 'r') as file:
+with open('biblio.txt', 'r') as file:
     for line in file:
         author = find.getAuthor(line)
         pubDate = find.getPubDate(line)
