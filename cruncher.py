@@ -1,10 +1,11 @@
 #!/usr/bin/python
 import find
 import regexes
+import logging
 
 output = open('output.bib', 'w')
 
-with open('biblio.txt', 'r') as file:
+with open('test.txt', 'r') as file:
     for line in file:
         author = find.getAuthor(line)
         pubDate = find.getPubDate(line)
@@ -20,8 +21,7 @@ with open('biblio.txt', 'r') as file:
         titleFirst = title.split(' ')[0].lower()
         citekey = authorLast + pubDate + titleFirst
 
-        print '---'
-        print line + '---'
+        print '---\n' + line + '---'
         if result['format'] == '@book':
             print 'format: ' + result['format']
             print 'author: ' + result['author']

@@ -75,12 +75,11 @@ def getArticle(entry, author, pubDate, title, journalPages):
             issue = issueNum.group()
             return dict([('author', author), ('pubDate', pubDate),
                 ('title', title), ('format', format), ('journal', journal),
-                ('pages', pages), ('volume', volume),
-                ('issue', issue)])
+                ('pages', pages), ('volume', volume), ('issue', issue)])
     else:
         return dict([('author', author), ('pubDate', pubDate),
             ('title', title), ('format', format), ('journal', journal),
-            ('pages', pages)])
+            ('pages', pages), ('volume', None), ('issue', None)])
 def getInCollection(entry, containingVolumeInfo, author, pubDate, title):
     format = '@incollection'
     bookInfo = re.search('(.*\d\.)',
