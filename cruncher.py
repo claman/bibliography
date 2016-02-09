@@ -3,14 +3,37 @@ import find
 import regexes
 import logging
 
+# logging configuration
+logger = logging.getLogger('importer')
+logger.setLevel(logging.DEBUG)
+# create file handler which logs even debug messages
+fh = logging.FileHandler('log.txt')
+fh.setLevel(logging.DEBUG)
+# create console handler with a higher log level
+ch = logging.StreamHandler()
+ch.setLevel(logging.ERROR)
+# create formatter and add it to the handlers
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+fh.setFormatter(formatter)
+# add the handlers to logger
+logger.addHandler(ch)
+logger.addHandler(fh)
+
+# define output file
 output = open('output.bib', 'w')
 
+# this processes each line
 with open('test.txt', 'r') as file:
     for line in file:
         author = find.getAuthor(line)
+        logger.debug(author)
         pubDate = find.getPubDate(line)
+        logger.debug(pubDate)
         titleInfo = find.getTitle(line)
         title, format = titleInfo[0], titleInfo[1]
+        logger.debug(title)
+        logger.debug(format)
 
         if format == '@book':
             result = find.getBook(line, author, pubDate, title, format)
@@ -20,6 +43,7 @@ with open('test.txt', 'r') as file:
         authorLast = author.split(',')[0].lower()
         titleFirst = title.split(' ')[0].lower()
         citekey = authorLast + pubDate + titleFirst
+        logger.debug(citekey)
 
         print '---\n' + line + '---'
         if result['format'] == '@book':
@@ -54,6 +78,7 @@ with open('test.txt', 'r') as file:
             print
 
         prompt = find.userPrompt('Add entry to bibliography? ([y]es/[s]kip/[e]dit): ')
+        logger.debug(prompt)
         if prompt[1] in find.options:
             if prompt[1] in find.positive:
                 if result['format'] == '@book':
